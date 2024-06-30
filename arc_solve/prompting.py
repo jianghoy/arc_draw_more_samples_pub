@@ -1147,6 +1147,22 @@ class PromptArgs:
 def make_prompt_alt(
     args: PromptArgs = PromptArgs(),
 ):
+    """
+    Generate a prompt for the AI model based on the given PromptArgs.
+    
+    This function creates a prompt that includes:
+    1. A system prompt with various configuration options
+    2. A set of example inputs and outputs with corresponding reasoning
+    
+    The function handles different display options and chooses appropriate
+    reasoning examples based on the configuration.
+    
+    Args:
+        args (PromptArgs): Configuration options for generating the prompt
+    
+    Returns:
+        list: A list of dictionaries representing the chat-like prompt structure
+    """
     assert (
         not args.use_spreadsheet_if_eq_size_and_change_prompt_otherwise
     ), "this needs to be handled at an earlier stage!"
@@ -1169,6 +1185,7 @@ def make_prompt_alt(
         )
     )
 
+    # Choose the appropriate set of reasoning examples based on the configuration
     if args.force_reasoning_labeled_items is not None:
         reasoning_labeled_items_here = list(args.force_reasoning_labeled_items)
     elif (
@@ -1189,6 +1206,7 @@ def make_prompt_alt(
             else reasoning_labeled_items_ascii
         )
 
+    # Add example inputs, outputs, and reasoning to the prompt
     for name, reasoning in reasoning_labeled_items_here:
         basic_prompt.append(
             {
@@ -1564,6 +1582,26 @@ async def run_on_input_with_name_alt(
     fail_if_image_too_big_thresh: Optional[int] = None,
     dry_run: bool = False,
 ):
+    """
+    Run the AI model on a given input with additional naming and processing.
+    
+    This function is a wrapper around run_on_input_alt that includes the task name
+    in the return value and processes the output.
+    
+    Args:
+        name (str): The name of the task or input
+        t (float): Temperature for sampling
+        n (int): Number of completions to generate
+        prompt_args (PromptArgs): Configuration for prompt generation
+        max_n_per_round (int): Maximum number of completions per API call
+        max_n_map_if_greater (list): Adjustments to max_n_per_round based on token count
+        fail_at_prompt_len (Optional[int]): Token count at which to fail
+        fail_if_image_too_big_thresh (Optional[int]): Threshold for failing due to large images
+        dry_run (bool): If True, don't actually run the model
+    
+    Returns:
+        tuple: (name, prompt_args, t, completions or None)
+    """
     out = await run_on_input_alt(
         name,
         t=t,
