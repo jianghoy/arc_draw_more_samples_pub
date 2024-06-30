@@ -262,6 +262,7 @@ You reason in substantial detail for as is necessary to determine the transforma
     if not additional_info:
         additional_info_line = ""
 
+    # The following part instructs the model to generate a program
     alternative_system_prompt_text = f"""You will given some number of paired example inputs and outputs. The outputs were produced by applying a transformation rule to the inputs. In addition to the paired example inputs and outputs, there is also one additional input without a known output. Your task is to determine the transformation rule and implement it in code.
 
 {input_line}{maybe_diff_highlight_line}{maybe_diff_triangles_line}
@@ -270,10 +271,9 @@ The transformation only needs to be unambiguous and applicable to the example in
 
 You'll need to carefully reason in order to determine the transformation rule. Start your response by carefully reasoning in <reasoning></reasoning> tags. Then, implement the transformation in code.
 
-# The following part instructs the model to generate a program
-After your reasoning write code in triple backticks (```python and then ```). You should write a function called `transform` which takes a single argument, the input grid as `list[list[int]]`, and returns the transformed grid (also as `list[list[int]]`). You should make sure that you implement a version of the transformation which works in general (it shouldn't just work for the additional input).
+After your reasoning you should summarize the transformation pattern in a concise and complete way.
 
-Don't write tests in your python code, just output the `transform` function. (It will be tested later.){additional_info_line}"""
+{additional_info_line}"""
 
     return [
         {
