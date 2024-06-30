@@ -270,6 +270,7 @@ The transformation only needs to be unambiguous and applicable to the example in
 
 You'll need to carefully reason in order to determine the transformation rule. Start your response by carefully reasoning in <reasoning></reasoning> tags. Then, implement the transformation in code.
 
+# The following part instructs the model to generate a program
 After your reasoning write code in triple backticks (```python and then ```). You should write a function called `transform` which takes a single argument, the input grid as `list[list[int]]`, and returns the transformed grid (also as `list[list[int]]`). You should make sure that you implement a version of the transformation which works in general (it shouldn't just work for the additional input).
 
 Don't write tests in your python code, just output the `transform` function. (It will be tested later.){additional_info_line}"""
